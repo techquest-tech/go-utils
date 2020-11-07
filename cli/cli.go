@@ -33,7 +33,7 @@ func Version() *cli.Command {
 type Cleanup func()
 
 //CloseOnlyNotified make app close only when notify
-func CloseOnlyNotified(c Cleanup) {
+func CloseOnlyNotified(c ...Cleanup) {
 	sigCh := make(chan os.Signal, 1)
 
 	signal.Notify(sigCh, os.Interrupt)
@@ -42,8 +42,8 @@ func CloseOnlyNotified(c Cleanup) {
 	select {
 	case <-sigCh:
 		logrus.Infof("Got Interrupt, app existing...")
-		if c != nil {
-			c()
+		for _, cc := range c {
+			cc()
 		}
 	}
 }
