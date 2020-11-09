@@ -18,6 +18,7 @@ var GitCommit = "unknown"
 
 func init() {
 	str.ReplaceByEnv("APP_VERSION", &BuildVersion)
+	logrus.Info("App version:", BuildVersion)
 }
 
 //Version print App version details.
@@ -26,9 +27,9 @@ func Version() *cli.Command {
 		Name:    "version",
 		Aliases: []string{"v"},
 		Action: func(c *cli.Context) error {
-			log.Print("BuildVersion", BuildVersion)
-			log.Print("GitCommit", GitCommit)
-			log.Print("APP version from ENV:", os.Getenv("APP_VERSION"))
+			log.Print("BuildVersion:\t", BuildVersion)
+			log.Print("GitCommit:\t", GitCommit)
+			log.Print("APP version from ENV:\t", os.Getenv("APP_VERSION"))
 			return nil
 		},
 	}
