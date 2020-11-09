@@ -10,6 +10,6 @@ import (
 func ReplaceByEnv(envkey string, arg *string) {
 	if envVar := os.Getenv(envkey); envVar != "" {
 		*arg = envVar
-		logrus.Info("update value with ENV.", envkey)
+		logrus.Infof("update value with ENV.%s to %s", envkey, envVar)
 	}
 }
