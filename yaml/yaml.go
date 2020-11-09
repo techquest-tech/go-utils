@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+	"github.com/techquest-tech/go-utils/str"
 	"github.com/valyala/fasttemplate"
 	"gopkg.in/yaml.v3"
 )
@@ -25,18 +26,11 @@ var EndTag = "}"
 //Version version
 var Version = "development"
 
-func replaceByEnv(envkey string, arg *string) {
-	if envVar := os.Getenv(envkey); envVar != "" {
-		*arg = envVar
-		logrus.Info("update value with ENV.YAML_AES_KEY")
-	}
-}
-
 func init() {
-	replaceByEnv("YAML_AES_KEY", &AesKey)
-	replaceByEnv("YAML_START_TAG", &StartTag)
-	replaceByEnv("YAML_END_TAG", &EndTag)
-	replaceByEnv("YAML_VESION", &Version)
+	str.ReplaceByEnv("APP_AES_KEY", &AesKey)
+	str.ReplaceByEnv("YAML_START_TAG", &StartTag)
+	str.ReplaceByEnv("YAML_END_TAG", &EndTag)
+	str.ReplaceByEnv("APP_VERSION", &Version)
 }
 
 func extendYaml(w io.Writer, tag string) (int, error) {

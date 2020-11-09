@@ -5,7 +5,8 @@ import (
 	"os/signal"
 
 	"github.com/sirupsen/logrus"
-	"github.com/urfave/cli"
+	"github.com/techquest-tech/go-utils/str"
+	"github.com/urfave/cli/v2"
 )
 
 //BuildVersion version for the app
@@ -13,6 +14,10 @@ var BuildVersion = "development"
 
 //GitCommit golang version.
 var GitCommit = "unknown"
+
+func init() {
+	str.ReplaceByEnv("APP_VERSION", &BuildVersion)
+}
 
 //Version print App version details.
 func Version() *cli.Command {
