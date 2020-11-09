@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"log"
 	"os"
 	"os/signal"
 
@@ -25,10 +26,9 @@ func Version() *cli.Command {
 		Name:    "version",
 		Aliases: []string{"v"},
 		Action: func(c *cli.Context) error {
-			logrus.WithFields(logrus.Fields{
-				"BuildVersion": BuildVersion,
-				"GitCommit":    GitCommit,
-			}).Info("version:")
+			log.Print("BuildVersion", BuildVersion)
+			log.Print("GitCommit", GitCommit)
+			log.Print("APP version from ENV:", os.Getenv("APP_VERSION"))
 			return nil
 		},
 	}
