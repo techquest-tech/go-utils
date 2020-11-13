@@ -73,6 +73,11 @@ func LoadYaml(file string, out interface{}) error {
 		logrus.WithField("file", file).Error("read file failed.", err)
 		return err
 	}
+	return LoadYamlBytes(content, out)
+}
+
+// LoadYamlBytes load yaml by bytes.
+func LoadYamlBytes(content []byte, out interface{}) error {
 	template, err := fasttemplate.NewTemplate(string(content), StartTag, EndTag)
 	if err != nil {
 		logrus.Error("valid template file failed.", err)
