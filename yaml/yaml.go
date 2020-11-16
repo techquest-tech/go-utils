@@ -33,7 +33,8 @@ func init() {
 	str.ReplaceByEnv("APP_VERSION", &Version)
 }
 
-func extendYaml(w io.Writer, tag string) (int, error) {
+//ExtendYaml functions for fasttemplate
+func ExtendYaml(w io.Writer, tag string) (int, error) {
 	tags := strings.Split(tag, ".")
 	prefix := strings.TrimSpace(tags[0])
 	value := ""
@@ -66,6 +67,27 @@ func extendYaml(w io.Writer, tag string) (int, error) {
 	}
 }
 
+//DecodeYamlFile decode yaml file
+func DecodeYamlFile(file string) ([]byte, error) {
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		logrus.WithField("file", file).Error("read file failed.", err)
+		return nil, err
+	}
+	return DecodeYaml(content)
+}
+
+//DecodeYaml decode yaml
+func DecodeYaml(content []byte) ([]byte, error) {
+	template, err := fasttemplate.NewTemplate(string(content), StartTag, EndTag)
+	if err != nil {
+		logrus.Error("valid template file failed.", err)
+		return nil, err
+	}
+	decoded := template.ExecuteFuncString(ExtendYaml)
+	return []byte(decoded), nil
+}
+
 // LoadYaml load yaml file, Unmarshal it to interface{}
 func LoadYaml(file string, out interface{}) error {
 	content, err := ioutil.ReadFile(file)
@@ -78,11 +100,11 @@ func LoadYaml(file string, out interface{}) error {
 
 // LoadYamlBytes load yaml by bytes.
 func LoadYamlBytes(content []byte, out interface{}) error {
-	template, err := fasttemplate.NewTemplate(string(content), StartTag, EndTag)
+
+	decoded, err := DecodeYaml(content)
 	if err != nil {
-		logrus.Error("valid template file failed.", err)
+		return err
 	}
-	decoded := template.ExecuteFuncString(extendYaml)
 
 	err = yaml.Unmarshal([]byte(decoded), out)
 	if err != nil {

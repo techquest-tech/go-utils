@@ -1,0 +1,11 @@
+rabbitmq:
+  host: "${env.AMQP_HOST }"
+  port: 5672
+  user: guest
+  password: ${ base64.Z3Vlc3Q= }
+  vhost: /
+  prop:
+      connection_name: camel-go-${version}
+
+ace: ${aes.fOJgd8XwW1AQXTPd6+3B5Q==}
+version: ${version}
