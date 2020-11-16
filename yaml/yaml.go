@@ -67,18 +67,18 @@ func ExtendYaml(w io.Writer, tag string) (int, error) {
 	}
 }
 
-//DecodeYamlFile decode yaml file
-func DecodeYamlFile(file string) ([]byte, error) {
+//DecodeFile decode yaml file
+func DecodeFile(file string) ([]byte, error) {
 	content, err := ioutil.ReadFile(file)
 	if err != nil {
 		logrus.WithField("file", file).Error("read file failed.", err)
 		return nil, err
 	}
-	return DecodeYaml(content)
+	return DecodeBytes(content)
 }
 
-//DecodeYaml decode yaml
-func DecodeYaml(content []byte) ([]byte, error) {
+//DecodeBytes decode yaml
+func DecodeBytes(content []byte) ([]byte, error) {
 	template, err := fasttemplate.NewTemplate(string(content), StartTag, EndTag)
 	if err != nil {
 		logrus.Error("valid template file failed.", err)
@@ -101,7 +101,7 @@ func LoadYaml(file string, out interface{}) error {
 // LoadYamlBytes load yaml by bytes.
 func LoadYamlBytes(content []byte, out interface{}) error {
 
-	decoded, err := DecodeYaml(content)
+	decoded, err := DecodeBytes(content)
 	if err != nil {
 		return err
 	}
