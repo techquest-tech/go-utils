@@ -10,10 +10,10 @@ func TestAesEncrypt(t *testing.T) {
 
 	rawpassword := "guest"
 
-	encrypt := AesEncrypt(rawpassword, AesKey)
+	encrypt := AESEncrypt(rawpassword)
 	logrus.Info("encrypt password:", encrypt)
 
-	origin := AesDecrypt(encrypt, AesKey)
+	origin := AESDecrypt(encrypt)
 	logrus.Info("decrypt password:", origin)
 
 	if rawpassword != origin {

@@ -7,6 +7,11 @@ import (
 	"encoding/base64"
 )
 
+//AESEncrypt AES encrypt with default key
+func AESEncrypt(orig string) string {
+	return AesEncrypt(orig, AesKey)
+}
+
 // AesEncrypt aes encrypt
 func AesEncrypt(orig string, key string) string {
 	// 转成字节数组
@@ -28,6 +33,11 @@ func AesEncrypt(orig string, key string) string {
 
 	return base64.StdEncoding.EncodeToString(cryted)
 
+}
+
+//AESDecrypt decrypt with default key
+func AESDecrypt(cryted string) string {
+	return AesDecrypt(cryted, AesKey)
 }
 
 // AesDecrypt aes decrypt
