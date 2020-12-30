@@ -6,6 +6,7 @@ import (
 	"os/signal"
 
 	"github.com/sirupsen/logrus"
+	"github.com/techquest-tech/go-utils/str"
 	"github.com/urfave/cli/v2"
 )
 
@@ -16,7 +17,7 @@ var BuildVersion = "development"
 var GitCommit = "unknown"
 
 func init() {
-	// str.ReplaceByEnv("APP_VERSION", &BuildVersion)
+	str.ReplaceByEnv("APP_VERSION", &BuildVersion)
 	logrus.Info("App version:", BuildVersion)
 }
 
@@ -28,7 +29,7 @@ func Version() *cli.Command {
 		Action: func(c *cli.Context) error {
 			log.Print("BuildVersion:\t", BuildVersion)
 			log.Print("GitCommit:\t", GitCommit)
-			log.Print("APP version from ENV:\t", os.Getenv("APP_VERSION"))
+			// log.Print("APP version from ENV:\t", os.Getenv("APP_VERSION"))
 			return nil
 		},
 	}

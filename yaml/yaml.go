@@ -14,9 +14,6 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-//AesKey key for AES
-var AesKey = "B0X128M4CO524D18"
-
 //StartTag default start tag
 var StartTag = "${"
 

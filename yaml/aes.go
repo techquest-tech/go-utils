@@ -7,6 +7,9 @@ import (
 	"encoding/base64"
 )
 
+//AesKey key for AES
+var AesKey = "B0X128M4CO524D18"
+
 //AESEncrypt AES encrypt with default key
 func AESEncrypt(orig string) string {
 	return AesEncrypt(orig, AesKey)
