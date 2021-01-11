@@ -30,6 +30,53 @@ func init() {
 	str.ReplaceByEnv("APP_VERSION", &Version)
 }
 
+func ExtendYamlPineline(w io.Writer, tag string) (int, error) {
+	tags := strings.Split(tag, "|")
+	prefix := strings.TrimSpace(tags[0])
+
+	switch prefix {
+	case "now":
+		now := time.Now()
+		strNow := now.Format(time.RFC3339)
+		return w.Write([]byte(strNow))
+	case "version":
+		return w.Write([]byte(Version))
+	}
+
+	index := 1
+	for {
+		current := ""
+		if index < len(tags) {
+			current = strings.TrimSpace(tags[index])
+		}
+		switch current {
+		case "now":
+			now := time.Now()
+			prefix = now.Format(prefix)
+		case "env":
+			envString := os.Getenv(prefix)
+			prefix = envString
+		case "upper":
+			prefix = strings.ToUpper(prefix)
+		case "lower":
+			prefix = strings.ToLower(prefix)
+		case "base64":
+			decoded, err := base64.StdEncoding.DecodeString(prefix)
+			if err != nil {
+				logrus.Error("setting error, base64 decode failed.", err)
+				return 0, err
+			}
+			prefix = string(decoded)
+		case "aes":
+			prefix = AesDecrypt(prefix, AesKey)
+		default:
+			return w.Write([]byte(prefix))
+		}
+		index = index + 1
+	}
+
+}
+
 //ExtendYaml functions for fasttemplate
 func ExtendYaml(w io.Writer, tag string) (int, error) {
 	tags := strings.Split(tag, ".")
@@ -81,7 +128,7 @@ func DecodeBytes(content []byte) ([]byte, error) {
 		logrus.Error("valid template file failed.", err)
 		return nil, err
 	}
-	decoded := template.ExecuteFuncString(ExtendYaml)
+	decoded := template.ExecuteFuncString(ExtendYamlPineline)
 	return []byte(decoded), nil
 }
 

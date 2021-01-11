@@ -1,11 +1,14 @@
 rabbitmq:
-  host: "${env.AMQP_HOST }"
+  host: "${AMQP_HOST | env }"
   port: 5672
   user: guest
-  password: ${ base64.Z3Vlc3Q= }
+  password: ${ Z3Vlc3Q= | base64}
   vhost: /
   prop:
-      connection_name: camel-go-${version}
+    connection_name: "${version}-from-${now}"
 
-ace: ${aes.fOJgd8XwW1AQXTPd6+3B5Q==}
-version: ${version}
+# ace: ${ fOJgd8XwW1AQXTPd6+3B5Q== | aes}
+ace: ${ fOJgd8XwW1AQXTPd6+3B5Q== | aes | upper | lower }
+version: "${version}-from-${now}"
+now: "${ now }"
+timeFormat: "${ 2006-01-02 | now }"
