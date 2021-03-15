@@ -15,7 +15,7 @@ import (
 // }
 
 func TestLoadYamlSprig(t *testing.T) {
-	expected := "192.168.1.3"
+	expected := "10.13.x.xx"
 
 	os.Setenv("AMQP_HOST", expected)
 
@@ -56,5 +56,8 @@ func TestLoadYamlSprig(t *testing.T) {
 			}
 		}
 	}
+
+	logrus.Infof("time: %v", out["timeFormat"])
+	logrus.Infof("now: %v", out["now"])
 
 }
