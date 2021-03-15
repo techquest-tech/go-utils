@@ -15,7 +15,7 @@ type YamlTemplate struct {
 	Yaml    string
 }
 
-func parse(file string) ([]byte, error) {
+func Parse(file string) ([]byte, error) {
 	content, err := os.ReadFile(file)
 	if err != nil {
 		logrus.Error("read file failed.", err)
@@ -53,7 +53,7 @@ func parse(file string) ([]byte, error) {
 //LoadYamlViaTemplate Load yaml with template engine.
 func LoadYamlViaTemplate(file string, out interface{}) error {
 
-	result, err := parse(file)
+	result, err := Parse(file)
 
 	if err != nil {
 		logrus.Error("template parse failed. ", err)
