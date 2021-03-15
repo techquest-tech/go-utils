@@ -77,40 +77,6 @@ func ExtendYamlPineline(w io.Writer, tag string) (int, error) {
 
 }
 
-//ExtendYaml functions for fasttemplate
-func ExtendYaml(w io.Writer, tag string) (int, error) {
-	tags := strings.Split(tag, ".")
-	prefix := strings.TrimSpace(tags[0])
-	value := ""
-	if len(tags) > 1 {
-		value = strings.TrimSpace(tags[1])
-	}
-
-	switch prefix {
-	case "env":
-		envString := os.Getenv(value)
-		return w.Write([]byte(envString))
-	case "now":
-		now := time.Now()
-		strNow := now.Format(time.RFC3339)
-		return w.Write([]byte(strNow))
-	case "version":
-		return w.Write([]byte(Version))
-	case "base64":
-		decoded, err := base64.StdEncoding.DecodeString(value)
-		if err != nil {
-			logrus.Error("setting error, base64 decode failed.", err)
-			return 0, err
-		}
-		return w.Write([]byte(decoded))
-	case "aes":
-		decryptCode := AesDecrypt(value, AesKey)
-		return w.Write([]byte(decryptCode))
-	default:
-		return w.Write([]byte(tag))
-	}
-}
-
 //DecodeFile decode yaml file
 func DecodeFile(file string) ([]byte, error) {
 	content, err := ioutil.ReadFile(file)

@@ -1,0 +1,13 @@
+rabbitmq:
+  host: ${ env  "AMQP_HOST" }
+  port: 5672
+  user: guest
+  password: ' ${ "Z3Vlc3Q=" | b64dec  }'
+  vhost: /
+  prop: 
+    connection_name: "${ version }-from-${now}"
+
+ace: ${ "fOJgd8XwW1AQXTPd6+3B5Q==" | aesdec }
+version: "${version }-from-${ now }"
+now: "${ now }"
+timeFormat: ${ now | date "2006-01-02"}
