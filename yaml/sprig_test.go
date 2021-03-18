@@ -3,6 +3,8 @@ package yaml
 import (
 	"os"
 	"testing"
+
+	"github.com/sirupsen/logrus"
 )
 
 // type TestObje struct {
@@ -12,20 +14,28 @@ import (
 // 	},
 // }
 
-func TestLoadYaml(t *testing.T) {
-	expected := "192.168.1.3"
+func TestLoadYamlSprig(t *testing.T) {
+	expected := "10.13.x.xx"
 
 	os.Setenv("AMQP_HOST", expected)
 
 	out := map[string]interface{}{}
 
-	err := LoadYaml("yaml_test.yml", out)
+	err := LoadYamlViaTemplate("sprig_test.yml", out)
 	if err != nil {
 		t.Error("load yaml file failed.", err)
 		t.Fail()
 	}
 
-	if obj, ok := out["rabbitmq"]; ok {
+	logrus.Infof("%v", out)
+
+	obj, ok := out["rabbitmq"]
+	if !ok {
+		t.Error("rabbitmq config missed.")
+		t.Fail()
+	}
+
+	if ok {
 		if rabbitmq, ok := obj.(map[string]string); ok {
 			if rabbitmq["host"] != expected {
 				t.Errorf("host is not matched env, %s vs %s", rabbitmq["host"], expected)
@@ -35,7 +45,6 @@ func TestLoadYaml(t *testing.T) {
 				t.Errorf("base64 decode failed. %s vs guest", rabbitmq["password"])
 				t.Fail()
 			}
-
 		}
 	}
 
@@ -47,5 +56,8 @@ func TestLoadYaml(t *testing.T) {
 			}
 		}
 	}
+
+	logrus.Infof("time: %v", out["timeFormat"])
+	logrus.Infof("now: %v", out["now"])
 
 }
