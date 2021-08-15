@@ -1,10 +1,12 @@
-package yaml
+package yaml_test
 
 import (
+	"log"
 	"os"
 	"testing"
 
-	"github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
+	"github.com/techquest-tech/go-utils/yaml"
 )
 
 // type TestObje struct {
@@ -21,13 +23,10 @@ func TestLoadYamlSprig(t *testing.T) {
 
 	out := map[string]interface{}{}
 
-	err := LoadYamlViaTemplate("sprig_test.yml", out)
-	if err != nil {
-		t.Error("load yaml file failed.", err)
-		t.Fail()
-	}
+	err := yaml.LoadYamlViaTemplate("sprig_test.yml", out)
+	assert.Nil(t, err)
 
-	logrus.Infof("%v", out)
+	// logrus.Infof("%v", out)
 
 	obj, ok := out["rabbitmq"]
 	if !ok {
@@ -37,27 +36,18 @@ func TestLoadYamlSprig(t *testing.T) {
 
 	if ok {
 		if rabbitmq, ok := obj.(map[string]string); ok {
-			if rabbitmq["host"] != expected {
-				t.Errorf("host is not matched env, %s vs %s", rabbitmq["host"], expected)
-				t.Fail()
-			}
-			if rabbitmq["password"] != "guest" {
-				t.Errorf("base64 decode failed. %s vs guest", rabbitmq["password"])
-				t.Fail()
-			}
+			assert.Equal(t, rabbitmq["host"], expected)
+			assert.Equal(t, rabbitmq["password"], "guest")
 		}
 	}
 
 	if obj, ok := out["ace"]; ok {
 		if ace, ok := obj.(string); ok {
-			if ace != "guest" {
-				t.Errorf("aes decode failed, %s vs guest", ace)
-				t.Fail()
-			}
+			assert.Equal(t, ace, "guest")
 		}
 	}
 
-	logrus.Infof("time: %v", out["timeFormat"])
-	logrus.Infof("now: %v", out["now"])
+	log.Printf("time: %v", out["timeFormat"])
+	log.Printf("now: %v", out["now"])
 
 }

@@ -5,8 +5,7 @@ import (
 	"html/template"
 	"os"
 
-	"github.com/Masterminds/sprig"
-	"github.com/sirupsen/logrus"
+	"github.com/Masterminds/sprig/v3"
 	"gopkg.in/yaml.v3"
 )
 
@@ -18,7 +17,7 @@ type YamlTemplate struct {
 func parse(file string) ([]byte, error) {
 	content, err := os.ReadFile(file)
 	if err != nil {
-		logrus.Error("read file failed.", err)
+		return []byte{}, err
 	}
 
 	tmpl := template.New("yaml").Funcs(sprig.FuncMap()).Funcs(template.FuncMap{
@@ -56,7 +55,6 @@ func LoadYamlViaTemplate(file string, out interface{}) error {
 	result, err := parse(file)
 
 	if err != nil {
-		logrus.Error("template parse failed. ", err)
 		return err
 	}
 
@@ -64,7 +62,6 @@ func LoadYamlViaTemplate(file string, out interface{}) error {
 
 	err = yaml.Unmarshal(result, out)
 	if err != nil {
-		logrus.Error("yaml unmarshal failed.", err)
 		return err
 	}
 

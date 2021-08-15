@@ -5,7 +5,6 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/sirupsen/logrus"
 	"github.com/techquest-tech/go-utils/str"
 	"github.com/urfave/cli/v2"
 )
@@ -18,7 +17,7 @@ var GitCommit = "unknown"
 
 func init() {
 	str.ReplaceByEnv("APP_VERSION", &BuildVersion)
-	logrus.Info("App version:", BuildVersion)
+	log.Println("App version:", BuildVersion)
 }
 
 //Version print App version details.
@@ -43,13 +42,13 @@ func CloseOnlyNotified(c ...Cleanup) {
 	sigCh := make(chan os.Signal, 1)
 
 	signal.Notify(sigCh, os.Interrupt)
-	signal.Notify(sigCh, os.Kill)
+	// signal.Notify(sigCh, os.Kill)
 
-	select {
-	case <-sigCh:
-		logrus.Infof("Got Interrupt, app existing...")
-		for _, cc := range c {
-			cc()
-		}
+	// select {
+	<-sigCh
+	log.Printf("Got Interrupt, app existing...")
+	for _, cc := range c {
+		cc()
 	}
+	// }
 }

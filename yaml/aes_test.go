@@ -1,23 +1,27 @@
-package yaml
+package yaml_test
 
 import (
+	"log"
 	"testing"
 
-	"github.com/sirupsen/logrus"
+	"github.com/magiconair/properties/assert"
+	"github.com/techquest-tech/go-utils/yaml"
 )
 
 func TestAesEncrypt(t *testing.T) {
 
 	rawpassword := "guest"
 
-	encrypt := AESEncrypt(rawpassword)
-	logrus.Info("encrypt password:", encrypt)
+	encrypt := yaml.AESEncrypt(rawpassword)
+	log.Println("encrypt password:", encrypt)
 
-	origin := AESDecrypt(encrypt)
-	logrus.Info("decrypt password:", origin)
+	origin := yaml.AESDecrypt(encrypt)
+	log.Println("decrypt password:", origin)
 
-	if rawpassword != origin {
-		t.Fail()
-	}
+	assert.Equal(t, rawpassword, origin)
+
+	// if rawpassword != origin {
+	// 	t.Fail()
+	// }
 
 }
